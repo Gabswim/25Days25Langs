@@ -44,7 +44,7 @@ Here’s the list of programming languages I’ll use throughout the challenge:
 15. **C**  
 16. **C++**  
 17. **Shell/Bash**  
-18. **Assembly (x86 or ARM)**  
+18. **Crystal**  
 19. **Fortran**  
 20. **Ada**  
 21. **R**  
