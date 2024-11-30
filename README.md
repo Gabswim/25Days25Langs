@@ -58,14 +58,15 @@ Here’s the list of programming languages I’ll use throughout the challenge:
 ---
 
 ## 📂 Repository Structure  
-Each day’s puzzle will have its own folder structured like this:  
-
+Each day’s puzzle will have its own folder structured like this:
+  
+```
 dayXX-<language>/
 ├── solution.<ext>       # The code solution
 ├── input.txt            # Puzzle input file (if provided)
 ├── output.txt           # Result output (optional)
 └── README.md            # Explanation of the approach and language-specific notes
-
+```
 ---
 
 ## 📖 How to Run the Solutions  
