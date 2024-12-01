@@ -59,22 +59,28 @@ Here’s the list of programming languages I’ll use throughout the challenge:
 
 ## 📂 Repository Structure  
 Each day’s puzzle will have its own folder structured like this:
-  
 ```
 dayXX-<language>/
-├── solution.<ext>       # The code solution
+├── Dockerfile           # Dockerfile for the language runtime (if needed)
 ├── input.txt            # Puzzle input file (if provided)
 ├── output.txt           # Result output (optional)
-└── README.md            # Explanation of the approach and language-specific notes
+├── README.md            # Explanation of the approach and language-specific notes
+└── solution.<ext>       # The code solution file 
 ```
 ---
 
 ## 📖 How to Run the Solutions  
-Instructions for running each day’s solution will be included in the respective `README.md` file in the daily folder.  
+### Prerequisites
+- **Docker**: Ensure you have Docker installed on your system.
 
-General guidelines:  
-- Install the language runtime or compiler (if not already installed).  
-- Run the solution using the respective command for the language (e.g., `python solution.py`, `rustc solution.rs`).  
+Run the following command:
+```bash
+./run_solution.sh <day-folder>
+```
+Example:
+```bash
+./run_solution.sh day01-python
+```
 
 ---
 
