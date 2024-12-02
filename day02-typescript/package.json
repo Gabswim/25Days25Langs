@@ -1,0 +1,13 @@
+{
+  "name": "day02-typescript",
+  "version": "1.0.0",
+  "main": "solution.ts",
+  "type": "module",
+  "scripts": {
+    "test": "tsx solution.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
