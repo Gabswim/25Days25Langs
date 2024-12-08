@@ -143,6 +143,5 @@ test "sol2" {
 }
 
 pub fn main() void {
-    std.debug.print("Hello, World!\n", .{});
-    std.debug.print("Hello, World2!\n", .{});
+    std.debug.print("Day 4!\n", .{});
 }
