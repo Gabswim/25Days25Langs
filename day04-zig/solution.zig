@@ -101,6 +101,47 @@ test "sol1" {
     try std.testing.expectEqual(sum, 2406);
 }
 
+test "sol2" {
+    var sum: i32 = 0;
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    const allocator = gpa.allocator();
+
+    const grid = try readFileAndParse("input.txt", allocator);
+
+    defer {
+        for (grid.items) |row| {
+            row.deinit();
+        }
+        grid.deinit();
+    }
+
+    const row = grid.items.len;
+    const column = grid.items[0].items.len;
+
+    for (1..row - 1) |i| {
+        for (1..column - 1) |j| {
+            if (grid.items[i].items[j] == 'A') {
+                std.debug.print("Found A at {d}, {d}\n", .{ i, j });
+                const topLeft = grid.items[i - 1].items[j - 1];
+                const topRight = grid.items[i - 1].items[j + 1];
+                const bottomLeft = grid.items[i + 1].items[j - 1];
+                const bottomRight = grid.items[i + 1].items[j + 1];
+                const cond1 = (topLeft == 'M' and bottomRight == 'S') or (topLeft == 'S' and bottomRight == 'M');
+                const cond2 = (topRight == 'M' and bottomLeft == 'S') or (topRight == 'S' and bottomLeft == 'M');
+                if (cond1 and cond2) {
+                    std.debug.print("Found one cross at {d}, {d}\n", .{ i, j });
+                    sum += 1;
+                }
+            }
+        }
+    }
+
+    std.debug.print("Sum: {d}\n", .{sum});
+
+    try std.testing.expectEqual(sum, 1807);
+}
+
 pub fn main() void {
     std.debug.print("Hello, World!\n", .{});
     std.debug.print("Hello, World2!\n", .{});
