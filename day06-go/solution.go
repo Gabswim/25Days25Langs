@@ -16,9 +16,9 @@ type Direction int
 
 const (
 	North Direction = iota
+	East
 	South
 	West
-	East
 )
 
 type TileType int
@@ -62,7 +62,6 @@ func (m *Map) Init(file string) error {
 			t, err := createTile(tile)
 			check(err)
 			lineTiles = append(lineTiles, t)
-			//fmt.Println(tile)
 		}
 		m.Bord = append(m.Bord, lineTiles)
 	}
@@ -89,96 +88,56 @@ func (m *Map) countVisited() int {
 				count++
 			}
 		}
-
 	}
 	return count
 }
 
-func (m *Map) String() string {
-	str := ""
-	for _, row := range m.Bord {
-		for _, tile := range row {
-			switch tile.Type {
-			case Nothing:
-				str += "."
-			case Obstacle:
-				str += "#"
-			case Guard:
-				str += "^"
-			case Visited:
-				str += "X"
-			}
-		}
-		str += "\n"
+func getNextDirection(d Direction) Direction {
+	switch d {
+	case North:
+		return East
+	case East:
+		return South
+	case South:
+		return West
+	case West:
+		return North
 	}
-	return str
+	panic("invalid direction")
 }
 
 func (m *Map) MoveToNextPosition() bool {
-	canMoveToNextPosition := false
-	distance := 0
 	i, j, d, err := m.getGuardPosition()
 	check(err)
 
-	m.Bord[i][j] = Tile{Type: Visited} // reinitialize tile
+	m.Bord[i][j].Type = Visited
+
 	nextI := i
 	nextJ := j
-	if d == East {
-		for j+1 < len(m.Bord[i]) && m.Bord[i][j+1].Type != Obstacle {
-			j++
-			nextJ = j
-			m.Bord[i][j] = Tile{Type: Visited}
-			canMoveToNextPosition = true
-			distance++
-		}
-	}
-	if d == South {
-		for i+1 < len(m.Bord) && m.Bord[i+1][j].Type != Obstacle {
-			i++
-			nextI = i
-			canMoveToNextPosition = true
-			m.Bord[i][j] = Tile{Type: Visited}
-			distance++
-		}
-	}
-	if d == West {
-		for j-1 >= 0 && m.Bord[i][j-1].Type != Obstacle {
-			j--
-			nextJ = j
-			canMoveToNextPosition = true
-			m.Bord[i][j] = Tile{Type: Visited}
-			distance++
-		}
-	}
-	if d == North {
-		for i-1 >= 0 && m.Bord[i-1][j].Type != Obstacle {
-			i--
-			nextI = i
-			canMoveToNextPosition = true
-			m.Bord[i][j] = Tile{Type: Visited}
-			distance++
-		}
+
+	switch d {
+	case North:
+		nextI--
+	case East:
+		nextJ++
+	case South:
+		nextI++
+	case West:
+		nextJ--
 	}
 
-	fmt.Printf("Guard moved %d steps to the %s\n", distance, [...]string{"North", "South", "West", "East"}[d])
-
-	getNextDirection := func(d Direction) Direction {
-		switch d {
-		case North:
-			return East // iterate to the right: i, j+1
-		case East:
-			return South // iterate down: i+1, j
-		case South:
-			return West // iterate to the left: i, j-1
-		case West:
-			return North // iterate up: i-1, j
-		}
-		panic("invalid direction") // TODO: handle this error
+	if nextI < 0 || nextI >= len(m.Bord) || nextJ < 0 || nextJ >= len(m.Bord[0]) {
+		return false
 	}
-	nextDirection := getNextDirection(d)
-	m.Bord[nextI][nextJ] = Tile{Type: Guard, Direction: nextDirection}
 
-	return canMoveToNextPosition
+	if m.Bord[nextI][nextJ].Type == Obstacle {
+		nextDirection := getNextDirection(d)
+		m.Bord[i][j] = Tile{Type: Guard, Direction: nextDirection}
+		return true
+	}
+
+	m.Bord[nextI][nextJ] = Tile{Type: Guard, Direction: d}
+	return true
 }
 
 func NewMap(file string) *Map {
@@ -199,7 +158,6 @@ func test(actual int, expected int) {
 
 func sol1(file string) int {
 	m := NewMap(file)
-	//fmt.Println(m)
 	hasLeaveTheMap := false
 
 	for !hasLeaveTheMap {
@@ -209,12 +167,10 @@ func sol1(file string) int {
 		}
 
 	}
-	fmt.Println(m)
-	return m.countVisited() + 1 // add the end position
+	return m.countVisited()
 }
 
 func main() {
-
 	test(sol1("./test-input.txt"), 41)
-	//test(sol1("./input.txt"), 41)
+	test(sol1("./input.txt"), 4903)
 }
