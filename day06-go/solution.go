@@ -317,5 +317,5 @@ func main() {
 	test(sol1("./input.txt"), 4903)
 
 	test(sol2("./test-input.txt"), 6)
-	test(sol2("./input.txt"), 10)
+	test(sol2("./input.txt"), 1911)
 }
